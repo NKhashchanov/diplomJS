@@ -59,21 +59,13 @@ class Actor {
 
         if (objActor === this) {
             return false;
-        }
-
-        if (objActor.left >= this.right) {
+        } else if (objActor.left >= this.right) {
             return false;
-        }
-
-        if (objActor.top >= this.bottom) {
+        } else if (objActor.top >= this.bottom) {
             return false;
-        }
-
-        if (objActor.right <= this.left) {
+        } else if (objActor.right <= this.left) {
             return false;
-        }
-
-        if (objActor.bottom <= this.top) {
+        } else if (objActor.bottom <= this.top) {
             return false;
         }
 
@@ -86,13 +78,7 @@ class Level {
         this.grid = grid;
         this.actors = actors;
         this.height = this.grid.length;
-        this.width = this.grid.reduce((i, j) => {
-                if (j.length > i) {
-                   return j.length;
-                } else {
-                   return i;
-                };
-            }, 0);
+        this.width = this.grid.reduce((x, y) => {return Math.max(y.length, x)}, 0);
         this.player = this.actors.find(player => player.type === 'player');
         this.status = null;
         this.finishDelay = 1;
@@ -301,7 +287,7 @@ class Coin extends Actor {
 
 class Player extends Actor {
     constructor(pos = new Vector()) {
-        super(pos.plus(new Vector(0, -0.5)), pos.plus(new Vector(0.8, 1.5)), new Vector(0, 0));
+        super(pos.plus(new Vector(0, -0.5)), new Vector(0.8, 1.5), new Vector(0, 0));
     }
 
     get type() {
@@ -309,32 +295,17 @@ class Player extends Actor {
     }
 }
 
-const schemas = [
-    [
-        '         ',
-        '         ',
-        '    =    ',
-        '       o ',
-        '     !xxx',
-        ' @       ',
-        'xxx!     ',
-        '         '
-    ],
-    [
-        '      v  ',
-        '    v    ',
-        '  v      ',
-        '        o',
-        '        x',
-        '@   x    ',
-        'x        ',
-        '         '
-    ]
-];
 const actorDict = {
     '@': Player,
+    'o': Coin,
+    '=': HorizontalFireball,
+    '|': VerticalFireball,
     'v': FireRain
 }
+
 const parser = new LevelParser(actorDict);
-runGame(schemas, parser, DOMDisplay)
-    .then(() => console.log('Вы выиграли приз!'));
+
+loadLevels()
+    .then(JSON.parse)
+    .then(levels => runGame(levels, parser, DOMDisplay)
+    .then(() => alert('Победа')));
