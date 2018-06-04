@@ -118,7 +118,9 @@ class Level {
         let yMax = Math.ceil(where.y + size.y);
         for (let i = yMin; i < yMax; i++) {
             for (let j = xMin; j < xMax; j++) {
-                return this.grid[i][j];
+                if (this.grid[i][j] !== undefined) {
+                    return this.grid[i][j];
+                }
             }
         }
     }
@@ -187,13 +189,13 @@ class LevelParser {
         const actors = [];
         array.forEach((cell, y) => cell.split('').forEach((symbol, x) => {
             let symbolClass = this.actorFromSymbol(symbol);
-            if (typeof symbolClass === 'function') {
-                let obj = new symbolClass(new Vector(x, y));
-                if (obj instanceof Actor) {
-                    actors.push(obj);
-                }
+        if (typeof symbolClass === 'function') {
+            let obj = new symbolClass(new Vector(x, y));
+            if (obj instanceof Actor) {
+                actors.push(obj);
             }
-        }));
+        }
+    }));
         return actors;
     }
 
