@@ -57,15 +57,7 @@ class Actor {
             throw new Error('Можно передавать только объект типа Actor');
         }
 
-        if (objActor === this) {
-            return false;
-        } else if (objActor.left >= this.right) {
-            return false;
-        } else if (objActor.top >= this.bottom) {
-            return false;
-        } else if (objActor.right <= this.left) {
-            return false;
-        } else if (objActor.bottom <= this.top) {
+        if (objActor === this || objActor.left >= this.right || objActor.top >= this.bottom || objActor.right <= this.left || objActor.bottom <= this.top) {
             return false;
         }
 
