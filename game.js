@@ -76,8 +76,13 @@ class Level {
         this.finishDelay = 1;
     }
 
+
     isFinished() {
-        return this.status !== null && this.finishDelay < 0
+        if (this.status !== null && this.finishDelay < 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     actorAt(objActor) {
@@ -111,6 +116,7 @@ class Level {
                 }
             }
         }
+
     }
 
     removeActor(objActor) {
